@@ -1,37 +1,45 @@
-## Welcome to GitHub Pages
+# Open Compute @ SUTD
 
-You can use the [editor on GitHub](https://github.com/OpenSUTD/compute/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+The SUTD Open Compute project is intended to serve members of the SUTD community who require computational resources (such as GPUs) that are otherwise costly to obtain. Due to capacity crunch, it will not literally be open access, but anyone with a reasonable use case will be allowed to use it.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+To apply for access, please use the following [form](https://forms.office.com/Pages/ResponsePage.aspx?id=drd2NJDpck-5UGJImDFiPTpJx5vRVY5AqrPkE_loV1NUMUNQWEhUR0dRTlhKRVo3R0RBSUs4N0VWTy4u) (requires SUTD account).
 
-### Markdown
+## Resources
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+| Type          | Resource      | GPUs | Status      | Information      |
+| ------------- | ------------- | ---- | ----------- | ---------------- |
+| Jupyter       | Nimbus        | 12   | Maintenance | [Link](#nimbus)  |
+| Jupyter       | Artemis       | 4    | Maintenance | [Link](#artemis) |
+| Batch jobs    | Apollo        | 4    | Operational | [Link](#apollo)  |
 
-```markdown
-Syntax highlighted code block
+### Nimbus
 
-# Header 1
-## Header 2
-### Header 3
+**Status: Under maintenance**
 
-- Bulleted
-- List
+Nimbus is a cluster of GPU servers to support educational (coursework) use of GPUs for courses such as Machine Learning and Deep Learning.
 
-1. Numbered
-2. List
+### Artemis
 
-**Bold** and _Italic_ and `Code` text
+**Status: Under maintenance**
 
-[Link](url) and ![Image](src)
-```
+The Artemis server is a high-performance server with 4 Titan XP GPUs to support Deep Learning projects and research.
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Apollo
 
-### Jekyll Themes
+**Status: Operational**
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/OpenSUTD/compute/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+The Apollo server is a high-performance server with 4 Titan XP GPUs to support Deep Learning projects and research.
 
-### Support or Contact
+**Usage Guidelines**
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+* Running Jupyter notebooks on Apollo is strictly prohibited. This is because Jupyter notebooks do not release the GPU memory unless shut down by the user. This prevents other users from using the GPU even if the GPU is not being utilised. 
+* TensorFlow's default behaviour is to allocate memory on all available GPUs. Please prevent this by:
+  * Set environment variable `CUDA_VISIBLE_DEVICES` to the GPU you intend to use (GPU 0/1/2/3)
+  * For TF 1.x: `config.gpu_options.allow_growth = True` ([Read more](https://github.com/tensorflow/docs/blob/master/site/en/r1/guide/using_gpu.md#allowing-gpu-memory-growth))
+  * For TF 2.0: `tf.config.experimental.set_memory_growth(gpu, True)` ([Read more](https://www.tensorflow.org/guide/gpu#limiting_gpu_memory_growth))
+* Avoid using multiple GPUs or running jobs that run for more than 24h unless strictly necessary
+* To reduce runtime of your job, please enable XLA to improve GPU compute efficiency:
+  * For TF 1.x: `config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.ON_1` ([Read more](https://medium.com/@xianbao.qian/use-xla-with-keras-3ca5d0309c26))
+  * For TF 2.0: `tf.config.optimizer_set_jit(True)` ([Read more](https://www.tensorflow.org/xla#enable_xla_for_tensorflow_models))
+
+
